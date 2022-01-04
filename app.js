@@ -5,6 +5,7 @@ const { open } = require("sqlite");
 const sqlite3 = require("sqlite3");
 const app = express();
 app.use(express.json());
+
 const dbPath = path.join(__dirname, "cricketTeam.db");
 
 let db = null;
@@ -39,19 +40,21 @@ app.get("/players/", async (req, res) => {
 //2.....post a player into database
 app.post("/players/", async (req, res) => {
   const playerDetails = req.body;
+  //console.log(playerDetails);
   const { playerName, jerseyNumber, role } = playerDetails;
-  const addplayer = `
-    INSERT INTO
-      cricket_team (playerName,jerseyNumber,role)
+  //console.log(role);
+  const addPlayer = `INSERT INTO
+      cricket_team (player_name,jersey_number,role)
     VALUES
       (
         '${playerName}',
          ${jerseyNumber},
-         ${role},
+         '${role}',
          
       );`;
 
-  const dbResponse = await db.run(addplayer);
+  const dbResponse = await db.run(addPlayer);
+  console.log(dbResponse);
   const player_id = dbResponse.lastID;
   response.send("Player Added to Team");
 });
@@ -72,10 +75,12 @@ app.get("/players/:playerId/", async (req, res) => {
 app.put("/players/:playerId/", async (req, res) => {
   const { playerId } = req.params;
   const playerDetails = req.body;
+  //console.log(playerDetails);
   const { playerName, jerseyNumber, role } = playerDetails;
+  //console.log(role);
   const updatequery = `UPDATE cricket_team SET
-    playerName=${playerName}
-    ,jerseyNumber=${jerseyNumber}
+    player_name=${playerName}
+    ,jersey_number=${jerseyNumber}
     ,role=${role} WHERE player_id=${playerId}`;
   const updateDetails = await db.run(updatequery);
   res.send("Player Details Updated");
@@ -90,7 +95,7 @@ app.delete("/players/:playerId/", async (req, res) => {
 cricket_team
     WHERE
       player_id=${playerId};`;
-  await db.run(deletePlayer);
+  const dbRes = await db.run(deletePlayer);
   res.send("Player Removed");
 });
 
