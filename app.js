@@ -28,11 +28,12 @@ const initializeDBAndServer = async () => {
 initializeDBAndServer();
 
 //1....get all player details
+
 app.get("/players/", async (req, res) => {
   const getPlayers = `SELECT
       *
     FROM  
-      cricket_team`;
+      cricket_team;`;
   const players = await db.all(getPlayers);
   res.send(players);
 });
@@ -49,14 +50,12 @@ app.post("/players/", async (req, res) => {
       (
         '${playerName}',
          ${jerseyNumber},
-         '${role}',
-         
-      );`;
+         '${role}');`;
 
   const dbResponse = await db.run(addPlayer);
-  console.log(dbResponse);
+  //console.log(dbResponse);
   const player_id = dbResponse.lastID;
-  response.send("Player Added to Team");
+  res.send("Player Added to Team");
 });
 
 //3....get player with playerId
@@ -78,11 +77,11 @@ app.put("/players/:playerId/", async (req, res) => {
   //console.log(playerDetails);
   const { playerName, jerseyNumber, role } = playerDetails;
   //console.log(role);
-  const updatequery = `UPDATE cricket_team SET
-    player_name=${playerName}
+  const updateQuery = `UPDATE cricket_team SET
+    player_name='${playerName}'
     ,jersey_number=${jerseyNumber}
-    ,role=${role} WHERE player_id=${playerId}`;
-  const updateDetails = await db.run(updatequery);
+    ,role='${role}' WHERE player_id=${playerId}`;
+  const dbRes = await db.run(updateQuery);
   res.send("Player Details Updated");
 });
 

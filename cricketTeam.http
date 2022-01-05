@@ -20,14 +20,14 @@ Content-Type: application/json
 // api.   3/...get player with playerId
 
 
-GET http://localhost:3000/players/12/
+GET http://localhost:3000/players/18/
 
 
 ###
 
 //api.   4/ ..update a player details
 
-PUT http://localhost:3000/players/7/
+PUT http://localhost:3000/players/18/
 Content-Type: application/json
 
 {
@@ -37,3 +37,7 @@ Content-Type: application/json
 }
 
 ###
+
+//api....5....delete player
+
+DELETE http://localhost:3000/players/18/
